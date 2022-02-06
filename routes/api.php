@@ -11,6 +11,9 @@ use App\Http\Controllers\PackageTypeController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
+use App\Models\Title;
+use App\Models\MaritalStatus;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -32,6 +35,14 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     // $data ['role'] = auth()->user()->roles()->pluck('name');
     // $data ['permissions'] = auth()->user()->getPermissions()->pluck('slug');
     return response()->json($data);
+});
+
+Route::get('/titles', function () {
+    return Title::all();
+});
+
+Route::get('/maritalStatus', function () {
+    return MaritalStatus::all();
 });
 
 Route::middleware('auth:sanctum')->get('/users', [UserController::class, 'list']);
