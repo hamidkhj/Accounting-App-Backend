@@ -95,3 +95,10 @@ Route::get('/services/{service}', [ServiceController::class, 'edit']);
 Route::put('/services/{service}', [ServiceController::class, 'update']);
 Route::delete('/services/{service}', [ServiceController::class, 'delete']);
 
+//------------Routes for managing users---------
+Route::get('/users', [UserController::class, 'list']);
+Route::post('/users', [UserController::class, 'store']);
+Route::get('/users/{user}', [UserController::class, 'edit']);
+Route::put('/users/{user}', [UserController::class, 'update']);
+Route::delete('/users/{user}', [UserController::class, 'delete']);
+

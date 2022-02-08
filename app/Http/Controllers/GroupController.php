@@ -18,14 +18,15 @@ class GroupController extends Controller
     {
         $validation = Validator::make($request->all(), [
             'name' => 'string|required',
-            'description' => 'string|required',
+            'description' => 'string|nullable',
             'package_id' => 'integer|required',
             'hour_limit' => 'integer|required',
         ]);
         // return $validation->validated();
 
         if ($validation->fails()) {
-            return response()->json($validation->messages());
+            $response = ['message' => $validation->messages(), 'code' => 400];
+            return response()->json($response);
         } else {
             $group = Group::create($validation->validated());
             return $group;
@@ -41,13 +42,14 @@ class GroupController extends Controller
     {
         $validation = Validator::make($request->all(), [
             'name' => 'string|required',
-            'description' => 'string|required',
+            'description' => 'string|nullable',
             'package_id' => 'integer|required',
             'hour_limit' => 'integer|required',
         ]);
 
         if ($validation->fails()) {
-            return response()->json($validation->messages());
+            $response = ['message' => $validation->messages(), 'code' => 400];
+            return response()->json($response);
         } else {
             $group->update($validation->validated());
             return $group;

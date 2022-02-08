@@ -5,25 +5,27 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Service;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\App;
 
 class ServiceController extends Controller
 {
     public function list()
     {
-        $services = Service::all();
+        $services = Service::orderByDesc("updated_at")->get();
         return $services;
     }
 
     public function store(Request $request)
     {
+        App::setlocale('fa');
         $validation = Validator::make($request->all(), [
-            'name' => 'string|required',
-            'description' => 'string|required',
+            'name' => 'string|required|unique:services,name',
+            'description' => 'string|nullable',
         ]);
-        // return $validation->validated();
 
         if ($validation->fails()) {
-            return response()->json($validation->messages());
+            $response = ['message' => $validation->messages(), 'code' => 400];
+            return response()->json($response);
         } else {
             $service = Service::create($validation->validated());
             return $service;
@@ -38,12 +40,13 @@ class ServiceController extends Controller
     public function update(Request $request, Service $service)
     {
         $validation = Validator::make($request->all(), [
-            'name' => 'string|required',
-            'description' => 'string|required',
+            'name' => 'string|required|unique:services,name,'.$service->id,
+            'description' => 'string|nullable',
         ]);
 
         if ($validation->fails()) {
-            return response()->json($validation->messages());
+            $response = ['message' => $validation->messages(), 'code' => 400];
+            return response()->json($response);
         } else {
             $service->update($validation->validated());
             return $service;

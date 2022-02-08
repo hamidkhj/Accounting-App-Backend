@@ -23,7 +23,7 @@ class UsersSeeder extends Seeder
             'birthday' => Carbon::create('2000', '01', '01'),
             'address' => 'my address',
             'phone' => '0123456789',
-            'personalCode' => '0123456789',
+            'personal_code' => '0123456789',
             'meli_code' => '987456123',
             'gender' => 'male',
             'email' => 'user@gmail.com',
