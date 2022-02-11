@@ -18,12 +18,13 @@ class LocationTypeController extends Controller
     public function store(Request $request)
     {
         $validation = Validator::make($request->all(), [
-            'name' => 'string|required',
-            'description' => 'string|required'
+            'name' => 'string|required|unique:location_types,name',
+            'description' => 'string|nullable'
         ]);
 
         if ($validation->fails()) {
-            return response()->json($validation->messages());
+            $response = ['message' => $validation->messages(), 'code' => 400];
+            return response()->json($response);
         } else {
             $locationType = LocationType::create($validation->validated());
             return $locationType;
@@ -38,12 +39,13 @@ class LocationTypeController extends Controller
     public function update(Request $request, LocationType $locationType)
     {
         $validation = Validator::make($request->all(), [
-            'name' => 'string|required',
-            'description' => 'string|required'
+            'name' => 'string|required|unique:location_types,name,'.$locationType->id,
+            'description' => 'string|nullable'
         ]);
 
         if ($validation->fails()) {
-            return response()->json($validation->messages());
+            $response = ['message' => $validation->messages(), 'code' => 400];
+            return response()->json($response);
         } else {
             $locationType->update($validation->validated());
             return $locationType;

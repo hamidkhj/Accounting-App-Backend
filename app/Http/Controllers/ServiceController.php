@@ -39,6 +39,7 @@ class ServiceController extends Controller
 
     public function update(Request $request, Service $service)
     {
+        App::setlocale('fa');
         $validation = Validator::make($request->all(), [
             'name' => 'string|required|unique:services,name,'.$service->id,
             'description' => 'string|nullable',

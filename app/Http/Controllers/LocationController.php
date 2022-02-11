@@ -18,21 +18,24 @@ class LocationController extends Controller
     public function store(Request $request)
     {
         $validation = Validator::make($request->all(), [
-            'name' => 'string|required',
+            'name' => 'string|required|unique:locations,name',
             'location_type_id' => 'integer|required',
-            'description' => 'string|required',
-            'address' => 'string|required',
-            'city' => 'string|required',
-            'phone1' => 'integer|required',
-            'phone2' => 'integer|required',
+            'description' => 'string|nullable',
+            'address' => 'string|nullable',
+            'city' => 'string|nullable',
+            'phone1' => 'integer|nullable',
+            'phone2' => 'integer|nullable',
         ]);
 
 
         if ($validation->fails()) {
-            return response()->json($validation->messages());
+            $response = ['message' => $validation->messages(), 'code' => 400];
+            return response()->json($response);
         } else {
             $location = Location::create($validation->validated());
-            $location->ips()->saveMany([$request->ips]);
+            if ($request->ips) {
+                $location->ips()->saveMany([$request->ips]);
+            }
             return $location;
         }
     }
@@ -45,17 +48,18 @@ class LocationController extends Controller
     public function update(Request $request, Location $location)
     {
         $validation = Validator::make($request->all(), [
-            'name' => 'string|required',
+            'name' => 'string|required|unique:locations,name,'.$location->id,
             'location_type_id' => 'integer|required',
-            'description' => 'string|required',
-            'address' => 'string|required',
-            'city' => 'string|required',
-            'phone1' => 'integer|required',
-            'phone2' => 'integer|required',
+            'description' => 'string|nullable',
+            'address' => 'string|nullable',
+            'city' => 'string|nullable',
+            'phone1' => 'integer|nullable',
+            'phone2' => 'integer|nullable',
         ]);
 
         if ($validation->fails()) {
-            return response()->json($validation->messages());
+            $response = ['message' => $validation->messages(), 'code' => 400];
+            return response()->json($response);
         } else {
             $ar = [];
             $location->update($validation->validated());

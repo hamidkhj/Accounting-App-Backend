@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\App;
+
 
 
 class UserController extends Controller
@@ -18,10 +20,11 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
-        // return $request->all();
+        App::setlocale('fa');
         $validation = $this->validation($request);
         if($validation->fails()){
-            return response()->json($validation->messages());
+            $response = ['message' => $validation->messages(), 'code' => 400];
+            return response()->json($response);
         }else{
             $data = $validation->validated();
             $data["password"] = bcrypt('password');
@@ -51,14 +54,14 @@ class UserController extends Controller
             'meli_code'=> 'integer|required',
             'static_ip'=> 'string|nullable',
             'email'=> 'email|required',
-            'org_email'=> 'email|required',
+            'org_email'=> 'email|nullable',
             'is_active'=> 'boolean|required',
-            'major'=> 'string|required',
+            'major'=> 'string|nullable',
             'passport'=> 'integer|nullable',
             'mobile1'=> 'integer|required',
             'mobile2'=> 'integer|nullable',
             'comment'=> 'string|nullable',
-            'city'=> 'string|required',
+            'city'=> 'string|nullable',
             'exp_date'=> 'date|required',
             'hour_limit'=> 'integer|nullable',
             'connection_number'=> 'integer|nullable',

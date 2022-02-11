@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Package;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\App;
 
 class PackageController extends Controller
 {
@@ -37,12 +38,12 @@ class PackageController extends Controller
      */
     public function store(Request $request)
     {
-        // return ($request->locations);
+        App::setlocale('fa');
 
         $validation = Validator::make($request->all(), [
             'package_type_id' => 'required|integer',
             'name' => 'string|required',
-            'description' => 'string|required',
+            'description' => 'string|nullable',
             'duration' => 'required|integer',
             'size' => 'required|integer',
             'price' => 'required|integer',
@@ -51,7 +52,8 @@ class PackageController extends Controller
         ]);
 
         if($validation->fails()){
-            return response()->json($validation->messages());
+            $response = ['message' => $validation->messages(), 'code' => 400];
+            return response()->json($response);
         }else{
             $package = Package::create($validation->validated());
             $package->locations()->sync($request->locations);
@@ -92,10 +94,11 @@ class PackageController extends Controller
      */
     public function update(Request $request, Package $package)
     {
+        App::setlocale('fa');
         $validation = Validator::make($request->all(), [
             'package_type_id' => 'required|integer',
             'name' => 'string|required',
-            'description' => 'string|required',
+            'description' => 'string|nullable',
             'duration' => 'required|integer',
             'size' => 'required|integer',
             'price' => 'required|integer',
@@ -104,7 +107,8 @@ class PackageController extends Controller
         ]);
 
         if($validation->fails()){
-            return response()->json($validation->messages());
+            $response = ['message' => $validation->messages(), 'code' => 400];
+            return response()->json($response);
         }else{
             // return $request->locations;
             $package->update($validation->validated());

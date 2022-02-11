@@ -34,8 +34,8 @@ class CreateUsersTable extends Migration
             $table->string('org_email')->nullable();
             $table->boolean('is_active')->default(1);
             $table->string('password');
-            $table->string('major');
-            $table->integer('passport')->nullabe();
+            $table->string('major')->nullable();
+            $table->integer('passport')->nullable();
             $table->integer('mobile1')->nullable();
             $table->integer('mobile2')->nullable();
             $table->string('comment')->nullable();

@@ -17,7 +17,7 @@ class CreatePackagesTable extends Migration
             $table->id();
             $table->bigInteger('package_type_id');
             $table->string('name');
-            $table->string('description');
+            $table->string('description')->nullable();
             $table->integer('duration');
             $table->integer('size');
             $table->integer('price');

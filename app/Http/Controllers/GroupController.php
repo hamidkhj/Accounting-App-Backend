@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Group;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 
 class GroupController extends Controller
 {
@@ -16,6 +17,7 @@ class GroupController extends Controller
 
     public function store(Request $request)
     {
+        App::setlocale('fa');
         $validation = Validator::make($request->all(), [
             'name' => 'string|required',
             'description' => 'string|nullable',
@@ -40,6 +42,7 @@ class GroupController extends Controller
 
     public function update(Request $request, Group $group)
     {
+        App::setlocale('fa');
         $validation = Validator::make($request->all(), [
             'name' => 'string|required',
             'description' => 'string|nullable',

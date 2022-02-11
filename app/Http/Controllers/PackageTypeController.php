@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\PackageType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\App;
 
 class PackageTypeController extends Controller
 {
@@ -37,15 +38,16 @@ class PackageTypeController extends Controller
      */
     public function store(Request $request)
     {
+        App::setlocale('fa');
         $validation = Validator::make($request->all(), [
             'name' => 'required|unique:package_types,name|string',
             'description' => 'string|nullable', 
             'priority' => 'required|integer'
-            // 'priority' => 'required|unique:package_types'
         ]);
 
         if($validation->fails()){
-            return response()->json($validation->messages());
+            $response = ['message' => $validation->messages(), 'code' => 400];
+            return response()->json($response);
         }else {
             $pt = PackageType::create($validation->validated());
             return $pt;
@@ -83,15 +85,16 @@ class PackageTypeController extends Controller
      */
     public function update(Request $request, PackageType $packageType)
     {
+        App::setlocale('fa');
         $validation = Validator::make($request->all(), [
-            'name' => 'required|unique:package_types,name|string',
+            'name' => 'string|required|unique:package_types,name,'.$packageType->id,
             'description' => 'string|nullable', 
             'priority' => 'required|integer'
-            // 'priority' => 'required|unique:package_types'
         ]);
 
         if($validation->fails()){
-            return response()->json($validation->messages());
+            $response = ['message' => $validation->messages(), 'code' => 400];
+            return response()->json($response);
         }else {
             $packageType->update($validation->validated());
             return $packageType;
