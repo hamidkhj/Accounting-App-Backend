@@ -29,7 +29,6 @@ class CreateUsersTable extends Migration
             $table->integer('personal_code')->nullable();
             $table->string('gender');
             $table->integer('meli_code');
-            $table->integer('static_ip')->nullable();
             $table->string('email');
             $table->string('org_email')->nullable();
             $table->boolean('is_active')->default(1);
@@ -42,6 +41,8 @@ class CreateUsersTable extends Migration
             $table->string('picture')->nullable();
             $table->string('city')->nullable();
             $table->date('exp_date');
+            $table->date('ip_exp_date')->nullable();
+            $table->string('static_ip')->nullable();
             $table->integer('hour_limit')->nullable();
             $table->integer('connection_number')->default(1);
             $table->integer('mac_address')->nullable();

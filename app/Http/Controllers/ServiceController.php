@@ -20,6 +20,7 @@ class ServiceController extends Controller
         App::setlocale('fa');
         $validation = Validator::make($request->all(), [
             'name' => 'string|required|unique:services,name',
+            'search_name' => 'string|required',
             'description' => 'string|nullable',
         ]);
 
@@ -42,6 +43,7 @@ class ServiceController extends Controller
         App::setlocale('fa');
         $validation = Validator::make($request->all(), [
             'name' => 'string|required|unique:services,name,'.$service->id,
+            'search_name' => 'string|required',
             'description' => 'string|nullable',
         ]);
 

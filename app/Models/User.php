@@ -38,7 +38,6 @@ class User extends Authenticatable
         'personal_code',
         'gender',
         'meli_code',
-        'static_ip',
         'email',
         'org_email',
         'is_active',
@@ -51,6 +50,8 @@ class User extends Authenticatable
         'picture',
         'city',
         'exp_date',
+        'ip_exp_date',
+        'static_ip',
         'hour_limit',
         'connection_number',
         'mac_address',
@@ -113,6 +114,10 @@ class User extends Authenticatable
     public function title()
     {
         return $this->belongsTo(Title::class);
+    }
+
+    public function userPackages () {
+        return $this->hasMany(UserPackage::class);
     }
 
 }

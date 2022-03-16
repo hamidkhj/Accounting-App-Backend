@@ -17,9 +17,16 @@ class CreateUserPackagesTable extends Migration
             $table->id();
             $table->bigInteger('package_id');
             $table->bigInteger('user_id');
-            $table->date('expiration_date');
-            $table->integer('megabyte');
+            $table->dateTimeTz('purchase_date');
+            $table->dateTimeTz('expiration_date');
+            $table->integer('remaining_megabyte');
             $table->integer('priority');
+            $table->integer('price');
+            $table->integer('duration');
+            $table->integer('size');
+            $table->integer('receipt_number');
+            $table->string('payment_type');
+            $table->string('name');
             $table->timestamps();
         });
     }

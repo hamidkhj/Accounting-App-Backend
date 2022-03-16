@@ -8,6 +8,7 @@ use App\Http\Controllers\LocationController;
 use App\Http\Controllers\LocationTypeController;
 use App\Http\Controllers\PackageController;
 use App\Http\Controllers\PackageTypeController;
+use App\Http\Controllers\ReportController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -99,6 +100,14 @@ Route::delete('/services/{service}', [ServiceController::class, 'delete']);
 Route::get('/users', [UserController::class, 'list']);
 Route::post('/users', [UserController::class, 'store']);
 Route::get('/users/{user}', [UserController::class, 'edit']);
-Route::put('/users/{user}', [UserController::class, 'update']);
 Route::delete('/users/{user}', [UserController::class, 'delete']);
+Route::post('/users/searchUsers', [UserController::class, 'searchUsers']);
+Route::post('/users/findUser', [UserController::class, 'findUser']);
+Route::post('/users/editUser', [UserController::class, 'editUser']);
 
+//------------Routes for managing reports---------
+Route::post('/ipReport', [ReportController::class, 'ipReport']);
+Route::post('/packageReport', [ReportController::class, 'packageReport']);
+Route::post('/userConsumptionReport', [ReportController::class, 'userConsumptionReport']);
+Route::post('/userActionLogReport', [ReportController::class, 'userActionLogReport']);
+Route::post('/userErrorReport', [ReportController::class, 'userErrorReport']);
