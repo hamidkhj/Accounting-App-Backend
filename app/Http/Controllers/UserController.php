@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Location;
+use App\Models\UserPackage;
+use App\Models\ConnectionLog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
@@ -143,5 +145,38 @@ class UserController extends Controller
         return $user;
     }
 
+    public function getFreePackageInfo(Request $request)
+    {
+        $userID = auth()->id();
+        $freePacakge = UserPackage::where('user_id', $userID)->where('purchase_date' , '>' , $request->date)->where('package_id', 1)->first();
+        return $freePacakge;
+    }
+
+    public function getPurchasedPacakge(Request $request)
+    {
+        $userID = auth()->id();
+        $purchasedPackage = UserPackage::where('user_id', $userID)
+            ->where('package_id', '!=', 1)
+            ->where('remaining_megabyte', '>', 0)
+            ->where('expiration_date', '>', $request->date)
+            ->orderBy('expiration_date')
+            ->first();
+        
+        return $purchasedPackage;
+    }
+
+    public function getTodayUsage(Request $request)
+    {
+        $start = $request->date. ' 00:00:00';
+        $end = $request->date. ' 23:59:59';
+        // return $start;
+
+        $bytes = ConnectionLog::select(DB::raw('SUM(bytes_in) as download, SUM(bytes_out) as upload, SUM(duration) as duration'))
+        ->where('user_id', auth()->id())
+        ->whereBetween('log_date', [$start, $end])
+        ->get();
+
+        return $bytes[0];
+    }
 
 }

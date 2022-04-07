@@ -15,9 +15,9 @@ class PackageTypeTableSeeder extends Seeder
     public function run()
     {
         PackageType::insert([
-            "name"=> 'نوع پیش فرض',
-            'priority' => '10',
-            'description' => 'این نوع پیش فرض بسته اینترنتی است',
+            "name"=> 'بسته رایگان',
+            'priority' => '1',
+            'description' => 'بسته رایگان ماهانه',
         ]);
     }
 }

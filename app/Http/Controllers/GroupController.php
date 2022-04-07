@@ -27,7 +27,7 @@ class GroupController extends Controller
         // return $validation->validated();
 
         if ($validation->fails()) {
-            $response = ['message' => $validation->messages(), 'code' => 400];
+            $response = ['message' => $validation->messages(), 'status' => 400];
             return response()->json($response);
         } else {
             $group = Group::create($validation->validated());

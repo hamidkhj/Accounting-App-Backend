@@ -17,7 +17,7 @@ class CreateUsersTable extends Migration
             $table->id();
             $table->smallInteger('group_id')->default(1);
             $table->smallInteger('title_id')->default(1);
-            $table->smallInteger('role_id')->default(1);
+            // $table->smallInteger('role_id')->default(1);
             $table->smallInteger('marital_status_id')->default(1);
             $table->string('user_name')->unique();
             $table->string('first_name');

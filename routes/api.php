@@ -30,13 +30,38 @@ use App\Models\MaritalStatus;
 //     return response()->json(auth()->user());
 // });
 
+Route::get('/checkLogInStatus', function (Request $request) {
+
+    if(auth()->check()) {
+        $data ['user'] = auth()->user();
+        // $data['permissions'] = auth()->user()->getPermissions()->pluck('slug');
+        $data['code'] = 200;
+        return response()->json($data);
+    }
+
+    $response = ['message' => 'user is not loged in', 'code' => 400];
+    return response()->json($response);
+});
+
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     $data ['user'] = auth()->user();
     $data ['user']['ip'] = $request->ip();
     // $data ['role'] = auth()->user()->roles()->pluck('name');
-    // $data ['permissions'] = auth()->user()->getPermissions()->pluck('slug');
+    $data ['permissions'] = auth()->user()->getPermissions()->pluck('slug');
     return response()->json($data);
 });
+
+Route::middleware('auth:sanctum')->get('/getPermissions', function (){
+    if(auth()->check()) {
+        $data['permissions'] = auth()->user()->getPermissions()->pluck('slug');
+        $data['code'] = 200;
+        return response()->json($data);
+    }
+
+    $response = ['message' => 'user is not loged in', 'code' => 400];
+    return response()->json($response);
+});
+
 
 Route::get('/titles', function () {
     return Title::all();
@@ -111,3 +136,9 @@ Route::post('/packageReport', [ReportController::class, 'packageReport']);
 Route::post('/userConsumptionReport', [ReportController::class, 'userConsumptionReport']);
 Route::post('/userActionLogReport', [ReportController::class, 'userActionLogReport']);
 Route::post('/userErrorReport', [ReportController::class, 'userErrorReport']);
+
+
+// ----------------------------routes for getting info for user pages
+Route::post('/userFreePackage', [UserController::class, 'getFreePackageInfo']);
+Route::post('/userPurchasedPackage', [UserController::class, 'getPurchasedPacakge']);
+Route::post('/userTodayUsage', [UserController::class, 'getTodayUsage']);
