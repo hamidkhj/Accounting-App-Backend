@@ -141,7 +141,7 @@ class UserController extends Controller
 
     public function findUser(Request $request)
     {
-        $user = User::where('id',$request['id'])->with('locations', 'group', 'services')->first();
+        $user = User::where('id',$request['id'])->with('locations', 'group', 'services','role')->first();
         return $user;
     }
 
@@ -177,6 +177,29 @@ class UserController extends Controller
         ->get();
 
         return $bytes[0];
+    }
+
+    public function changeRole(Request $request)
+    {
+       
+        $validation = Validator::make($request->all(), [
+            'roleId' => 'required|integer',
+            'userId' => 'required|integer',
+        ]);
+
+        if($validation->fails()) {
+            return response()->json($validation->messages());
+        } else {
+            $uid = $validation->validated()['userId'];
+            $rid = $validation->validated()['roleId'];
+            $user = User::find($uid);
+            if(!$user) {
+                return response()->json('user not found');
+            }
+            $user->syncRoles([$rid]);
+            return response()->json('success');
+        }
+        
     }
 
 }

@@ -46,7 +46,7 @@ Route::get('/checkLogInStatus', function (Request $request) {
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     $data ['user'] = auth()->user();
     $data ['user']['ip'] = $request->ip();
-    // $data ['role'] = auth()->user()->roles()->pluck('name');
+    $data ['role'] = auth()->user()->roles()->pluck('name');
     $data ['permissions'] = auth()->user()->getPermissions()->pluck('slug');
     return response()->json($data);
 });
@@ -54,6 +54,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::middleware('auth:sanctum')->get('/getPermissions', function (){
     if(auth()->check()) {
         $data['permissions'] = auth()->user()->getPermissions()->pluck('slug');
+        $data['role'] = auth()->user()->getRoles()->pluck('name');
         $data['code'] = 200;
         return response()->json($data);
     }
@@ -74,11 +75,13 @@ Route::get('/maritalStatus', function () {
 Route::middleware('auth:sanctum')->get('/users', [UserController::class, 'list']);
 
 //------------Routes for managing Roles---------
-Route::get('/roles', [RoleController::class, 'list']);
+Route::get('/rolesForEdit', [RoleController::class, 'listForEdit']);
+Route::get('/rolesForAssignment', [RoleController::class, 'listForAssignment']);
 Route::post('/roles', [RoleController::class, 'store']);
 Route::get('/roles/{role}', [RoleController::class, 'edit']);
 Route::put('/roles/{role}', [RoleController::class, 'update']);
 Route::put('/roles/changePermission/{role}', [RoleController::class, 'changePermission']);
+Route::get('/permissions', [RoleController::class, 'permissionList']);
 
 //------------Routes for managing Groups---------
 Route::get('/groups', [GroupController::class, 'list']);
@@ -129,6 +132,7 @@ Route::delete('/users/{user}', [UserController::class, 'delete']);
 Route::post('/users/searchUsers', [UserController::class, 'searchUsers']);
 Route::post('/users/findUser', [UserController::class, 'findUser']);
 Route::post('/users/editUser', [UserController::class, 'editUser']);
+Route::post('/users/changeRole', [UserController::class, 'changeRole']);
 
 //------------Routes for managing reports---------
 Route::post('/ipReport', [ReportController::class, 'ipReport']);

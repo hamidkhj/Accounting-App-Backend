@@ -5,12 +5,21 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use jeremykenedy\LaravelRoles\Models\Role;
+use jeremykenedy\LaravelRoles\Models\Permission;
 
 class RoleController extends Controller
 {
-    public function list()
+    public function listForEdit()
     {
-        $roles = Role::all();
+        // $roles = Role::with('permissions:id')->get();
+        $roles = Role::with('permissions:id')->get()->except([1,2]);
+        return response()->json($roles);
+    }
+
+    public function listForAssignment()
+    {
+        // $roles = Role::with('permissions:id')->get();
+        $roles = Role::with('permissions:id')->get()->except([1]);
         return response()->json($roles);
     }
 
@@ -32,6 +41,9 @@ class RoleController extends Controller
             return response()->json($validation->messages());
          } else {
             $role->update($validation->validated());
+            if(is_array($request->permissionIds)) {
+                $role->syncPermissions($request->permissionIds);
+            }
             return response("successfuly updated", 200);
          }
 
@@ -49,6 +61,9 @@ class RoleController extends Controller
             return response()->json($validation->messages());
          } else {
             $role = Role::create($validation->validated());
+            if($request->permissionIds) {
+                $role->syncPermissions($request->permissionIds);
+            }
             return response()->json($role);
          }
 
@@ -66,5 +81,11 @@ class RoleController extends Controller
             $role->syncPermissions($permissions);
             return response()->json([$role->permissions]);
          }
+    }
+
+    public function permissionList()
+    {
+        $perm = Permission::all();
+        return response()->json($perm); 
     }
 }

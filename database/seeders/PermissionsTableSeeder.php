@@ -67,6 +67,12 @@ class PermissionsTableSeeder extends Seeder
                 'model'       => 'Permission',
             ],
             [
+                'name'        => 'Can Edit Packages',
+                'slug'        => 'edit.packages',
+                'description' => 'Can edit packages',
+                'model'       => 'Permission',
+            ],
+            [
                 'name'        => 'Can Edit Services',
                 'slug'        => 'edit.services',
                 'description' => 'Can edit services',
@@ -99,6 +105,18 @@ class PermissionsTableSeeder extends Seeder
             [
                 'name'        => 'Can View PurchasedPackages Report',
                 'slug'        => 'view.purchasedPackagesReport',
+                'description' => 's',
+                'model'       => 'Permission',
+            ],
+            [
+                'name'        => 'Can Send Message',
+                'slug'        => 'send.message',
+                'description' => 's',
+                'model'       => 'Permission',
+            ],
+            [
+                'name'        => 'Can Send Group Message',
+                'slug'        => 'send.groupmessage',
                 'description' => 's',
                 'model'       => 'Permission',
             ],
