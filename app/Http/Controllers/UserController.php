@@ -6,10 +6,15 @@ use App\Models\User;
 use App\Models\Location;
 use App\Models\UserPackage;
 use App\Models\ConnectionLog;
+use App\Models\RecoverPassword;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\NewPassword;
+use App\Mail\RecoverPasswordCode;
 
 
 
@@ -200,6 +205,85 @@ class UserController extends Controller
             return response()->json('success');
         }
         
+    }
+
+    public function ResetPasswordByAdmin(User $user)
+    {
+        $random = Str::random(10);
+        $user->update(['password' => bcrypt($random)]);
+        Mail::to($user->email)->send(new NewPassword($user, $random));
+        return 'success';
+    }
+
+    public function forgotPassword(Request $request)
+    {
+        $this->validation = Validator::make($request->all(), [
+            'username' => 'required',
+            'phone' => 'required',
+        ]);
+
+        if($this->validation->fails()) {
+            return response()->json([
+                'errors' => $this->validation->messages()
+            ]);
+         } else {
+            $user = User::where('user_name', $this->validation->validated()['username'])
+            ->where(function($query){
+                $query->where('mobile1', $this->validation->validated()['phone'])
+                ->orWhere('mobile2', $this->validation->validated()['phone']);
+            })->first();
+            
+            if(!$user){
+                return response()->json([
+                    'errors' => ['کاربر با مشخصات وارد شده وجود ندارد']
+                ]);
+            }
+
+            $oldCode = RecoverPassword::where('recover_code' , '!=' , 0 )->get();
+
+            if(!$oldCode->isEmpty()) {
+                foreach ($oldCode as $item ) {
+                    $item->update(['recover_code' => 0]);
+                }
+            }
+
+            $code = random_int(100000, 999999);
+            RecoverPassword::create([
+                'user_id' => $user->id,
+                "recover_code" => $code
+            ]);
+            Mail::to($user->email)->send(new RecoverPasswordCode($code));
+            return 'success';
+         }
+    }
+
+    public function requestNewPassword(Request $request)
+    {
+        $validation = Validator::make($request->all(), [
+            'username' => 'required|string',
+            'code' => 'required|string',
+        ]);
+
+        if($validation->fails()) {
+            return response()->json($validation->messages());
+        } else {
+            $user = User::where('user_name', $validation->validated()['username'])->first();
+            if(!$user){
+                return 'invalid';
+            }
+
+            $code = RecoverPassword::where('user_id', $user->id)->where('recover_code', $validation->validated()['code'])->first();
+
+            if(!$code){
+                return 'invalid';
+            }
+
+            $random = Str::random(10);
+            $user->update(['password' => bcrypt($random)]);
+            Mail::to($user->email)->send(new NewPassword($user, $random));
+            return 'success';
+
+        }
     }
 
 }

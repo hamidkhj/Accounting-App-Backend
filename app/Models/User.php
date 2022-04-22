@@ -56,6 +56,7 @@ class User extends Authenticatable
         'connection_number',
         'mac_address',
         'bandwidth_limit',
+        'password'
     ];
 
     /**

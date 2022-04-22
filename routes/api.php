@@ -133,6 +133,9 @@ Route::post('/users/searchUsers', [UserController::class, 'searchUsers']);
 Route::post('/users/findUser', [UserController::class, 'findUser']);
 Route::post('/users/editUser', [UserController::class, 'editUser']);
 Route::post('/users/changeRole', [UserController::class, 'changeRole']);
+Route::post('/users/resetPasswordByAdmin/{user}', [UserController::class, 'ResetPasswordByAdmin']);
+Route::post('/users/forgotPassword', [UserController::class, 'forgotPassword']);
+Route::post('/users/requestNewPassword', [UserController::class, 'requestNewPassword']);
 
 //------------Routes for managing reports---------
 Route::post('/ipReport', [ReportController::class, 'ipReport']);
@@ -142,7 +145,7 @@ Route::post('/userActionLogReport', [ReportController::class, 'userActionLogRepo
 Route::post('/userErrorReport', [ReportController::class, 'userErrorReport']);
 
 
-// ----------------------------routes for getting info for user pages
+// ----------------------------routes for getting info for user pages---------------
 Route::post('/userFreePackage', [UserController::class, 'getFreePackageInfo']);
 Route::post('/userPurchasedPackage', [UserController::class, 'getPurchasedPacakge']);
 Route::post('/userTodayUsage', [UserController::class, 'getTodayUsage']);
