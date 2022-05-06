@@ -21,8 +21,8 @@ class CreateConnectionLogsTable extends Migration
             $table->string('line')->nullable();
             $table->string('address')->nullable();
             $table->integer('duration')->nullable();
-            $table->integer('bytes_in')->nullable();
-            $table->integer('bytes_out')->nullable();
+            $table->bigInteger('bytes_in')->nullable();
+            $table->bigInteger('bytes_out')->nullable();
             $table->string('connect_speed')->nullable();
             $table->string('disc_cause')->nullable();
             $table->integer('disc_cause_ext')->nullable();

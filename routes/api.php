@@ -9,6 +9,7 @@ use App\Http\Controllers\LocationTypeController;
 use App\Http\Controllers\PackageController;
 use App\Http\Controllers\PackageTypeController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\MessageController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -45,6 +46,7 @@ Route::get('/checkLogInStatus', function (Request $request) {
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     $data ['user'] = auth()->user();
+    $data ['messages'] = auth()->user()->messages()->with('sender:id,first_name,last_name')->latest()->take(3)->get();
     $data ['user']['ip'] = $request->ip();
     $data ['role'] = auth()->user()->roles()->pluck('name');
     $data ['permissions'] = auth()->user()->getPermissions()->pluck('slug');
@@ -104,7 +106,8 @@ Route::get('/locationTypes/{locationType}', [LocationTypeController::class, 'edi
 Route::put('/locationTypes/{locationType}', [LocationTypeController::class, 'update']);
 Route::delete('/locationTypes/{locationType}', [LocationTypeController::class, 'delete']);
 
-//------------Routes for managing Locations---------
+//------------Routes for managing packages---------
+Route::get('/packages/saleList', [PackageController::class, 'packagesForSale']);
 Route::get('/packages', [PackageController::class, 'index']);
 Route::post('/packages', [PackageController::class, 'store']);
 Route::get('/packages/{package}', [PackageController::class, 'edit']);
@@ -149,3 +152,7 @@ Route::post('/userErrorReport', [ReportController::class, 'userErrorReport']);
 Route::post('/userFreePackage', [UserController::class, 'getFreePackageInfo']);
 Route::post('/userPurchasedPackage', [UserController::class, 'getPurchasedPacakge']);
 Route::post('/userTodayUsage', [UserController::class, 'getTodayUsage']);
+
+// ----------------------------routes for managing messages---------------
+Route::post('/messages/sendToUser', [MessageController::class, 'sendToUser']);
+Route::get('/messages/list', [MessageController::class, 'list']);

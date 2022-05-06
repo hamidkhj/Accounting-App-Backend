@@ -152,8 +152,12 @@ class UsersSeeder extends Seeder
         ];
 
         foreach ($userList as $item) {
-            User::insert($item);
+            User::create($item);
         }
+
+        $user = User::first();
+        $admin = config('roles.models.role')::where('slug', 'admin')->first();
+        $user->syncRoles([$admin->id]);
         
     }
 }

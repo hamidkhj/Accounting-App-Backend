@@ -23,8 +23,8 @@ class LocationController extends Controller
             'description' => 'string|nullable',
             'address' => 'string|nullable',
             'city' => 'string|nullable',
-            'phone1' => 'integer|nullable',
-            'phone2' => 'integer|nullable',
+            'phone1' => 'regex:([0-9]*)|nullable',
+            'phone2' => 'regex:([0-9]*)|nullable',
         ]);
 
 
@@ -33,8 +33,13 @@ class LocationController extends Controller
             return response()->json($response);
         } else {
             $location = Location::create($validation->validated());
-            if ($request->ips) {
-                $location->ips()->saveMany([$request->ips]);
+            if($request->ips){
+                foreach ($request->ips as $value) {
+                    Ip::create([
+                        "location_id" => $location->id,
+                        "ip" => $value['ip']
+                    ]);
+                }
             }
             return $location;
         }
@@ -53,8 +58,8 @@ class LocationController extends Controller
             'description' => 'string|nullable',
             'address' => 'string|nullable',
             'city' => 'string|nullable',
-            'phone1' => 'integer|nullable',
-            'phone2' => 'integer|nullable',
+            'phone1' => 'regex:([0-9]*)|nullable',
+            'phone2' => 'regex:([0-9]*)|nullable',
         ]);
 
         if ($validation->fails()) {

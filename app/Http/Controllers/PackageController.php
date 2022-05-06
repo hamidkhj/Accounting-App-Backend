@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Package;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\App;
@@ -127,5 +128,25 @@ class PackageController extends Controller
     public function destroy(Package $package)
     {
         //
+    }
+
+
+        /**
+     * Retrive packages for sales page.
+     *
+     * @param  \App\Models\user  $user
+     * @return \Illuminate\Http\Response
+     */
+
+    public function packagesForSale()
+    {
+
+        $packages = Package::whereHas('groups', function ($query){
+            $query->where('groups.id', Auth()->user()->group_id);
+        })->where('is_for_sale', 1)
+        ->where('package_type_id', '!=', 1)
+        ->get();
+
+        return $packages;
     }
 }

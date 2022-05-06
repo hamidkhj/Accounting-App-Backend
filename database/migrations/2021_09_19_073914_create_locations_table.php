@@ -20,8 +20,8 @@ class CreateLocationsTable extends Migration
             $table->string('description')->nullable();
             $table->string('address')->nullable();
             $table->string('city')->nullable();
-            $table->integer('phone1')->nullable();
-            $table->integer('phone2')->nullable();
+            $table->string('phone1')->nullable();
+            $table->string('phone2')->nullable();
             $table->timestamps();
         });
     }
