@@ -21,8 +21,9 @@ class GroupController extends Controller
         $validation = Validator::make($request->all(), [
             'name' => 'string|required',
             'description' => 'string|nullable',
-            'package_id' => 'integer|required',
+            'package_size' => 'integer|required',
             'hour_limit' => 'integer|required',
+            'web_service' => 'string|required',
         ]);
         // return $validation->validated();
 
@@ -46,8 +47,9 @@ class GroupController extends Controller
         $validation = Validator::make($request->all(), [
             'name' => 'string|required',
             'description' => 'string|nullable',
-            'package_id' => 'integer|required',
+            'package_size' => 'integer|required',
             'hour_limit' => 'integer|required',
+            'web_service' => 'string|required',
         ]);
 
         if ($validation->fails()) {

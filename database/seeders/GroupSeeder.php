@@ -16,31 +16,31 @@ class GroupSeeder extends Seeder
     {
         $groupList = [
             [
-                'package_id' => 1, 
+                'package_size' => 1, 
                 'name' => 'group 1', 
                 'description' => 'description', 
                 'hour_limit' => 0
             ],
             [
-                'package_id' => 1, 
+                'package_size' => 1, 
                 'name' => 'group 2', 
                 'description' => 'description', 
                 'hour_limit' => 0
             ],
             [
-                'package_id' => 1, 
+                'package_size' => 1, 
                 'name' => 'group 3', 
                 'description' => 'description', 
                 'hour_limit' => 0
             ],
             [
-                'package_id' => 1, 
+                'package_size' => 1, 
                 'name' => 'group 4', 
                 'description' => 'description', 
                 'hour_limit' => 0
             ],
             [
-                'package_id' => 1, 
+                'package_size' => 1, 
                 'name' => 'group 5', 
                 'description' => 'description', 
                 'hour_limit' => 0

@@ -28,6 +28,7 @@ class DatabaseSeeder extends Seeder
             ConnectionLogSeeder::class,
             ActionLogSeeder::class,
             CallsLogSeeder::class,
+            PackageTableSeeder::class,
         ]);
     }
 }

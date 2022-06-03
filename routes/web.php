@@ -15,4 +15,3 @@ use Illuminate\Http\Request;
 |
 */
 
-

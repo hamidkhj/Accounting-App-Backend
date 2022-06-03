@@ -153,7 +153,7 @@ class UserController extends Controller
     public function getFreePackageInfo(Request $request)
     {
         $userID = auth()->id();
-        $freePacakge = UserPackage::where('user_id', $userID)->where('purchase_date' , '>' , $request->date)->where('package_id', 1)->first();
+        $freePacakge = UserPackage::where('user_id', $userID)->where('purchase_date' , '>' , $request->date)->where('package_id', 0)->first();
         return $freePacakge;
     }
 
@@ -161,7 +161,7 @@ class UserController extends Controller
     {
         $userID = auth()->id();
         $purchasedPackage = UserPackage::where('user_id', $userID)
-            ->where('package_id', '!=', 1)
+            ->where('package_id', '!=', 0)
             ->where('remaining_megabyte', '>', 0)
             ->where('expiration_date', '>', $request->date)
             ->orderBy('expiration_date')
@@ -286,4 +286,40 @@ class UserController extends Controller
         }
     }
 
+
+    // report functions 
+    public function consumptionReport()
+    {
+        $report = [];
+
+        try {
+            $report = ConnectionLog::where('user_id', Auth()->id())->where('line', 'like', '%VPN%')
+            ->orderByDesc('log_date')
+            ->get();
+            $report->makeHidden(['id', 'user_id']);
+        } catch (\Throwable $th) {
+            return $th;
+        }
+        
+
+        return $report;
+    }
+
+    
+    public function packageReport()
+    {
+        $report = [];
+
+        try {
+            $report = UserPackage::where('user_id', Auth()->id())->where('payment_type' ,'!=', 'free')
+            ->orderByDesc('purchase_date')
+            ->get();
+            $report->makeHidden(['id', 'user_id']);
+        } catch (\Throwable $th) {
+            return $th;
+        }
+        
+
+        return $report;
+    }
 }

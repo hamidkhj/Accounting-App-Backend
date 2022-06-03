@@ -10,6 +10,8 @@ use App\Http\Controllers\PackageController;
 use App\Http\Controllers\PackageTypeController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\MessageController;
+use App\Http\Controllers\ParsianRecordController;
+use App\Http\Controllers\HelperController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -30,6 +32,11 @@ use App\Models\MaritalStatus;
 // Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 //     return response()->json(auth()->user());
 // });
+
+
+Route::get('/testTo', function () {
+    return redirect('https://www.google.com/');
+});
 
 Route::get('/checkLogInStatus', function (Request $request) {
 
@@ -152,7 +159,18 @@ Route::post('/userErrorReport', [ReportController::class, 'userErrorReport']);
 Route::post('/userFreePackage', [UserController::class, 'getFreePackageInfo']);
 Route::post('/userPurchasedPackage', [UserController::class, 'getPurchasedPacakge']);
 Route::post('/userTodayUsage', [UserController::class, 'getTodayUsage']);
+// user reports
+Route::get('/userReports/consumptionReport', [UserController::class, 'consumptionReport']);
+Route::get('/userReports/packageReport', [UserController::class, 'packageReport']);
 
 // ----------------------------routes for managing messages---------------
 Route::post('/messages/sendToUser', [MessageController::class, 'sendToUser']);
 Route::get('/messages/list', [MessageController::class, 'list']);
+
+
+//---------------------bank routes
+Route::middleware('auth:sanctum')->get('/bank/checkout/{package}', [ParsianRecordController::class, 'checkout']);
+Route::post('/bank/response', [ParsianRecordController::class, 'response']);
+
+// ---------------------------------
+Route::post('/getKarmandInfo', [HelperController::class, 'getKarmandInfo']);

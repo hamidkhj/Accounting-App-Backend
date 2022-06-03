@@ -9,15 +9,15 @@ class Group extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'description', 'package_id', 'hour_limit'];
+    protected $fillable = ['name', 'description', 'package_size', 'hour_limit', 'web_service'];
 
     public function users()
     {
         return $this->hasMany(User::class);
     }
 
-    public function packages()
-    {
-        return $this->belongsToMany(Package::class);
-    }
+    // public function packages()
+    // {
+    //     return $this->belongsToMany(Package::class);
+    // }
 }
