@@ -24,7 +24,7 @@ class CreateUserPackagesTable extends Migration
             $table->integer('price');
             $table->integer('duration');
             $table->integer('size');
-            $table->integer('receipt_number');
+            $table->string('receipt_number');
             $table->string('payment_type');
             $table->string('name');
             $table->timestamps();

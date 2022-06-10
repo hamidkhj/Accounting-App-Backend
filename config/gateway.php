@@ -72,7 +72,8 @@ return [
     //--------------------------------
     'parsian' => [
         'pin'          => '5b6Ox5BMIuI543IiUax8',
-        'callback-url' => '/api/bank/response'
+        'callback-url' => '/api/bank/response',
+        'additionalData' => '349110158124008002537192020000'
     ],
     //--------------------------------
     // Pasargad gateway

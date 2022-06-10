@@ -50,6 +50,7 @@ class Kernel extends ConsoleKernel
                 }
             }
 
+            // package id = 0 shows free monthly packages
             if($month != 0){
                 $duration = ($month > 6) ? 30 : 31;
                 $users = User::with('group')->get();

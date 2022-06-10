@@ -16,10 +16,10 @@ class UserPackage extends Model
         'purchase_date',
         'remaining_megabyte',
         'priority',
-        'receipt_number',
         'price',
-        'size',
         'duration',
+        'size',
+        'receipt_number',
         'payment_type',
         'name',
     ];

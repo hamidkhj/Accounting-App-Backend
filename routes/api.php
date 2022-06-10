@@ -12,6 +12,7 @@ use App\Http\Controllers\ReportController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\ParsianRecordController;
 use App\Http\Controllers\HelperController;
+use App\Http\Controllers\OnlineUserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -172,5 +173,9 @@ Route::get('/messages/list', [MessageController::class, 'list']);
 Route::middleware('auth:sanctum')->get('/bank/checkout/{package}', [ParsianRecordController::class, 'checkout']);
 Route::post('/bank/response', [ParsianRecordController::class, 'response']);
 
-// ---------------------------------
+// --------------------------------- helper methods
 Route::post('/getKarmandInfo', [HelperController::class, 'getKarmandInfo']);
+
+//-------- online user table
+Route::get('/onlineUser/getUserInfo', [OnlineUserController::class, 'userInfo']);
+Route::get('/onlineUser/disconnect/{onlineUser}', [OnlineUserController::class, 'disconnect']);

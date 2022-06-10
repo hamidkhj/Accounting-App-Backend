@@ -7,6 +7,7 @@ use App\Models\Package;
 use App\Models\ParsianRecord;
 use App\Models\UserPackage;
 use App\Models\PackageType;
+use Carbon\Carbon;
 
 
 class ParsianRecordController extends Controller
@@ -27,7 +28,8 @@ class ParsianRecordController extends Controller
          
             $refId =  $gateway->refId(); // شماره ارجاع بانک
             $transID = $gateway->transactionId(); // شماره تراکنش
-         
+
+            
             // در اینجا
             //  شماره تراکنش  بانک را با توجه به نوع ساختار دیتابیس تان 
             //  در جداول مورد نیاز و بسته به نیاز سیستم تان
@@ -57,31 +59,40 @@ class ParsianRecordController extends Controller
         try { 
 
             $gateway = \Gateway::verify();
+            // $trackingCode = 802260897039;
+            // $refId = "201250540569203";
+            // $cardNumber =  "603799******0634";
             $trackingCode = $gateway->trackingCode();
             $refId = $gateway->refId();
             $cardNumber = $gateway->cardNumber();
+
+            // dd([
+            //     'trackingcode' => $trackingCode,
+            //     'refID' => $refId,
+            //     'cardnumber' => $cardNumber
+            // ]);
          
             // تراکنش با موفقیت سمت بانک تایید گردید
             // در این مرحله عملیات خرید کاربر را تکمیل میکنیم
 
             $purchase = ParsianRecord::where('sale_order_id', $refId)->first();
             $package = Package::where('id', $purchase->package_id)->first();
-            $packageType = PackageType::find($package->type_id);
+            $packageType = PackageType::find($package->package_type_id);
+
             UserPackage::create([
                 'package_id' => $package->id,
                 'user_id' => $purchase->user_id,
                 'purchase_date' => Carbon::now(),
                 'expiration_date' => Carbon::now()->addDays($package->duration),
-                'ramaining_megabyte' => $package->size,
+                'remaining_megabyte' => $package->size,
                 'priority' => $packageType->priority,
                 'price' => $purchase->price,
                 'duration' => $package->duration,
                 'size' => $package->size,
-                'receipt_number' => $refId,
+                'receipt_number' => $trackingCode,
                 'payment_type' => 'online',
                 'name' => $package->name, 
             ]);
-
 
             return redirect('http://localhost:3000/dashboard/response/0');
          
