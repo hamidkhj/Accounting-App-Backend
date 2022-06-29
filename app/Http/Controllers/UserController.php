@@ -15,6 +15,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\NewPassword;
 use App\Mail\RecoverPasswordCode;
+use Carbon\Carbon;
 
 
 
@@ -321,5 +322,45 @@ class UserController extends Controller
         
 
         return $report;
+    }
+
+
+    public function dailyUsage()
+    {
+        // $start = $request->date. ' 00:00:00';
+        // $end = $request->date. ' 23:59:59';
+        // $start = $request->date. ' 00:00:00';
+        // $end = $request->date. ' 23:59:59';
+        // return $start;
+
+        // $start = Carbon::now()->addDays($package->duration),
+
+        // $bytes = ConnectionLog::select(DB::raw('SUM(bytes_in) as download, SUM(bytes_out) as upload, SUM(duration) as duration'))
+        // ->where('user_id', auth()->id())
+        // ->whereBetween('log_date', [Carbon::now(), Carbon::now()->subDays(10)])
+        // ->get()
+        // ->groupBy(function ($val) {
+        //     return Carbon::parse($val->log_date)->format('d');
+        // });
+
+        $bytes = ConnectionLog::where('user_id', Auth()->id())
+        ->whereBetween('log_date', [Carbon::now()->subDays(15)->format('Y-m-d'),Carbon::now()->format('Y-m-d')])
+        ->orderBy('log_date')
+        ->get()
+        ->groupBy(function ($val) {
+            return Carbon::parse($val->log_date)->format('d');
+        })->map(function ($row) {
+            return $row->sum('bytes_in') + $row->sum('bytes_out');
+        });
+
+        // $bytes = ConnectionLog::select(DB::raw('SUM(bytes_in) as download, SUM(bytes_out) as upload, SUM(duration) as duration'), 'log_date')
+        // ->groupBy(DB::raw("DATE_FORMAT(log_date, '%d-%m-%Y')"))
+        // ->where('user_id', auth()->id())
+        // ->whereBetween('log_date', [Carbon::now()->subDays(10)->format('Y-m-d'),Carbon::now()->format('Y-m-d')])
+        // ->orderByDESC('log_date')
+        // ->get();
+
+
+        return $bytes;
     }
 }

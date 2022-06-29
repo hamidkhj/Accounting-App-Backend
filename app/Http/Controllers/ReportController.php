@@ -7,6 +7,7 @@ use App\Models\Service;
 use App\Models\ConnectionLog;
 use App\Models\ActionLog;
 use App\Models\CallsLog;
+use App\Models\ParsianRecord;
 
 use Illuminate\Http\Request;
 
@@ -141,6 +142,36 @@ class ReportController extends Controller
             return $th;
         }
         
+
+        return $report;
+    }
+
+    public function bankReport(Request $request)
+    {
+        $report = [];
+        $end = $date = date ("Y/m/d H:i", (strtotime($request['endDate']) + 24*60*60 - 1)). ":00";
+        $start = $request['startDate'];
+        $amount = 0;
+
+        if ($request->userName) {
+            $user = User::where('user_name' , $request->userName)->first();
+            return $user;
+        }
+        if ($request->amount) {
+            $amount = $request->amount;
+        }
+
+        $report = ParsianRecord::with('user:id,user_name')
+        ->when($request->userName, function ($query, $user) {
+            $query->where('user_id', $user->id);
+        })
+        ->when($request->status == 'success', function ($query, $amount) {
+            $query->where('status', 'SUCCESS');
+        })
+        ->when($request->amount, function ($query,$amount) {
+            $query->where('price', $amount);
+        })
+        ->whereBetween('created_at', [$start, $end])->get();
 
         return $report;
     }

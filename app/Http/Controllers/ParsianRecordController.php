@@ -76,6 +76,7 @@ class ParsianRecordController extends Controller
             // در این مرحله عملیات خرید کاربر را تکمیل میکنیم
 
             $purchase = ParsianRecord::where('sale_order_id', $refId)->first();
+            $purchase->update(['status' => 'SUCCESS']);
             $package = Package::where('id', $purchase->package_id)->first();
             $packageType = PackageType::find($package->package_type_id);
 

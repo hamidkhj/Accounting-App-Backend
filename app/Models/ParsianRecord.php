@@ -19,4 +19,14 @@ class ParsianRecord extends Model
         'message',
         'RNN',
     ];
+
+    protected $hidden = [
+        'id', 'user_id', 'package_id'
+    ];
+
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

@@ -154,12 +154,14 @@ Route::post('/packageReport', [ReportController::class, 'packageReport']);
 Route::post('/userConsumptionReport', [ReportController::class, 'userConsumptionReport']);
 Route::post('/userActionLogReport', [ReportController::class, 'userActionLogReport']);
 Route::post('/userErrorReport', [ReportController::class, 'userErrorReport']);
+Route::post('/bankReport', [ReportController::class, 'bankReport']);
 
 
 // ----------------------------routes for getting info for user pages---------------
 Route::post('/userFreePackage', [UserController::class, 'getFreePackageInfo']);
 Route::post('/userPurchasedPackage', [UserController::class, 'getPurchasedPacakge']);
 Route::post('/userTodayUsage', [UserController::class, 'getTodayUsage']);
+Route::get('/dailyUsage', [UserController::class, 'dailyUsage']);
 // user reports
 Route::get('/userReports/consumptionReport', [UserController::class, 'consumptionReport']);
 Route::get('/userReports/packageReport', [UserController::class, 'packageReport']);

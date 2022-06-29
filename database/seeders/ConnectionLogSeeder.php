@@ -17,7 +17,7 @@ class ConnectionLogSeeder extends Seeder
     {
         $list = [
             [
-                'user_id' => 1, 
+                'user_id' => 2, 
                 'log_date'=> Carbon::now()->addDays(2),
                 'gateway' => '127.127.14.29',
                 'address' => '127.127.14.29',
@@ -29,7 +29,7 @@ class ConnectionLogSeeder extends Seeder
                 'details' => 'some information is going to be here'
             ],
             [
-                'user_id' => 1, 
+                'user_id' => 2, 
                 'log_date'=> Carbon::now()->subDays(2),
                 'gateway' => '127.127.14.29',
                 'address' => '127.127.14.29',
@@ -41,7 +41,7 @@ class ConnectionLogSeeder extends Seeder
                 'details' => 'some information is going to be here'
             ],
             [
-                'user_id' => 1, 
+                'user_id' => 2, 
                 'log_date'=> Carbon::now()->subDays(3),
                 'gateway' => '127.127.14.29',
                 'address' => '127.127.14.29',
@@ -53,7 +53,7 @@ class ConnectionLogSeeder extends Seeder
                 'details' => 'some information is going to be here'
             ],
             [
-                'user_id' => 1, 
+                'user_id' => 2, 
                 'log_date'=> Carbon::now()->addDays(1),
                 'gateway' => '127.127.14.29',
                 'address' => '127.127.14.29',
