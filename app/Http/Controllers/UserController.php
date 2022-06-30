@@ -42,6 +42,9 @@ class UserController extends Controller
             $user->locations()->sync($request->locationIds);
             $user->services()->sync($request->serviceIds);
 
+            $userRole = config('roles.models.role')::where('slug', 'user')->first();
+            $user->syncRoles([$userRole->id]);
+
             return $user;
         }
     }
