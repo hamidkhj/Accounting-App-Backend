@@ -41,6 +41,7 @@ class ParsianRecordController extends Controller
                 'sale_order_id' => $refId, 
                 'price' => $package->price,
                 'token' => $transID,
+                'status' => 'INIT'
             ]);
 
          
@@ -57,20 +58,16 @@ class ParsianRecordController extends Controller
     public function response()
     {
         try { 
-
             $gateway = \Gateway::verify();
+
             // $trackingCode = 802260897039;
-            // $refId = "201250540569203";
+            // $refId = "204782696028828";
             // $cardNumber =  "603799******0634";
+
+
             $trackingCode = $gateway->trackingCode();
             $refId = $gateway->refId();
             $cardNumber = $gateway->cardNumber();
-
-            // dd([
-            //     'trackingcode' => $trackingCode,
-            //     'refID' => $refId,
-            //     'cardnumber' => $cardNumber
-            // ]);
          
             // تراکنش با موفقیت سمت بانک تایید گردید
             // در این مرحله عملیات خرید کاربر را تکمیل میکنیم
@@ -95,7 +92,8 @@ class ParsianRecordController extends Controller
                 'name' => $package->name, 
             ]);
 
-            return redirect('http://localhost:3000/dashboard/response/0');
+            return redirect(env('REDIRECT_ADDRESS').'/dashboard/response/0');
+            // return redirect('http://localhost:3000/dashboard/response/0');
          
          } catch (\Larabookir\Gateway\Exceptions\RetryException $e) {
          
@@ -104,13 +102,19 @@ class ParsianRecordController extends Controller
              // لذا تنها فاکتور خرید قبل را مجدد به کاربر نمایش میدهیم
          
              echo $e->getMessage() . "<br>";
-             return redirect('http://localhost:3000/dashboard/response/1');
+             return redirect(env('REDIRECT_ADDRESS').'/dashboard/response/1');
+            //  return redirect('http://localhost:3000/dashboard/response/1');
          
          } catch (\Exception $e) {
          
              // نمایش خطای بانک
              echo $e->getMessage();
-             return redirect('http://localhost:3000/dashboard/response/2');
+             $refId = $gateway->refId();
+             $purchase = ParsianRecord::where('sale_order_id', $refId)->first();
+             $purchase->update(['status' => 'FAIL']);
+
+             return redirect(env('REDIRECT_ADDRESS').'/dashboard/response/2');
+            //  return redirect('http://localhost:3000/dashboard/response/2');
          }
     }
 

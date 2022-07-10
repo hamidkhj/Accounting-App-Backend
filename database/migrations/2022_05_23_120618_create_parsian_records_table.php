@@ -20,7 +20,7 @@ class CreateParsianRecordsTable extends Migration
             $table->string('sale_order_id')->unique();
             $table->string('price');
             $table->string('token')->nullable();
-            $table->integer('status')->nullable();
+            $table->string('status')->nullable();
             $table->text('message')->nullable();
             $table->string('RNN')->nullable();
             $table->timestamps();

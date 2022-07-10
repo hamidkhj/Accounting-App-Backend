@@ -152,20 +152,28 @@ class ReportController extends Controller
         $end = $date = date ("Y/m/d H:i", (strtotime($request['endDate']) + 24*60*60 - 1)). ":00";
         $start = $request['startDate'];
         $amount = 0;
+        $user = null;
+        $this->userID = 0;
 
+        // return $request->all();
         if ($request->userName) {
             $user = User::where('user_name' , $request->userName)->first();
-            return $user;
+            if ($user == null){
+                return $report;
+            }
+
+            $this->userID = $user->id;
         }
+
         if ($request->amount) {
             $amount = $request->amount;
         }
 
         $report = ParsianRecord::with('user:id,user_name')
-        ->when($request->userName, function ($query, $user) {
-            $query->where('user_id', $user->id);
+        ->when($request->userName, function ($query) {
+            $query->where('user_id', $this->userID);
         })
-        ->when($request->status == 'success', function ($query, $amount) {
+        ->when($request->paymentStatus == 'success', function ($query, $amount) {
             $query->where('status', 'SUCCESS');
         })
         ->when($request->amount, function ($query,$amount) {
