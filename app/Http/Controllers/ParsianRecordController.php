@@ -109,10 +109,6 @@ class ParsianRecordController extends Controller
          
              // نمایش خطای بانک
              echo $e->getMessage();
-             $refId = $gateway->refId();
-             $purchase = ParsianRecord::where('sale_order_id', $refId)->first();
-             $purchase->update(['status' => 'FAIL']);
-
              return redirect(env('REDIRECT_ADDRESS').'/dashboard/response/2');
             //  return redirect('http://localhost:3000/dashboard/response/2');
          }

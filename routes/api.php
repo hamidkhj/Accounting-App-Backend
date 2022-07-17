@@ -55,6 +55,7 @@ Route::get('/checkLogInStatus', function (Request $request) {
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     $data ['user'] = auth()->user();
     $data ['messages'] = auth()->user()->messages()->with('sender:id,first_name,last_name')->latest()->take(3)->get();
+    $data['messageCount'] = auth()->user()->messages()->where('is_seen', 0)->count();
     $data ['user']['ip'] = $request->ip();
     $data ['role'] = auth()->user()->roles()->pluck('name');
     $data ['permissions'] = auth()->user()->getPermissions()->pluck('slug');
@@ -168,6 +169,7 @@ Route::get('/userReports/packageReport', [UserController::class, 'packageReport'
 
 // ----------------------------routes for managing messages---------------
 Route::post('/messages/sendToUser', [MessageController::class, 'sendToUser']);
+Route::post('/messages/sendToAll', [MessageController::class, 'sendToAll']);
 Route::get('/messages/list', [MessageController::class, 'list']);
 
 
