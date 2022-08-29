@@ -216,7 +216,7 @@ class UserController extends Controller
         $random = Str::random(10);
         $user->update(['password' => bcrypt($random)]);
         Mail::to($user->email)->send(new NewPassword($user, $random));
-        return 'success';
+        return response()->json($random);
     }
 
     public function forgotPassword(Request $request)
