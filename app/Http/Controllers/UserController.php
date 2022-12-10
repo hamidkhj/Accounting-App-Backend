@@ -38,6 +38,7 @@ class UserController extends Controller
         }else{
             $data = $validation->validated();
             $data["password"] = bcrypt('password');
+            $data["pap"] = "password";
             $user = User::create($data);
             $user->locations()->sync($request->locationIds);
             $user->services()->sync($request->serviceIds);
@@ -214,7 +215,11 @@ class UserController extends Controller
     public function ResetPasswordByAdmin(User $user)
     {
         $random = Str::random(10);
-        $user->update(['password' => bcrypt($random)]);
+        // $user->update(['password' => bcrypt($random)]);
+        $user->update([
+            'password' => bcrypt($random),
+            'pap' => $random
+        ]);
         Mail::to($user->email)->send(new NewPassword($user, $random));
         return response()->json($random);
     }
@@ -283,7 +288,11 @@ class UserController extends Controller
             }
 
             $random = Str::random(10);
-            $user->update(['password' => bcrypt($random)]);
+            // $user->update(['password' => bcrypt($random)]);
+            $user->update([
+                'password' => bcrypt($random),
+                'pap' => $random
+            ]);
             Mail::to($user->email)->send(new NewPassword($user, $random));
             return 'success';
 

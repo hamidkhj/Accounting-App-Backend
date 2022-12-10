@@ -56,7 +56,8 @@ class User extends Authenticatable
         'connection_number',
         'mac_address',
         'bandwidth_limit',
-        'password'
+        'password',
+        'pap'
     ];
 
     /**
@@ -67,6 +68,7 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
+        'pap',
     ];
 
     /**
